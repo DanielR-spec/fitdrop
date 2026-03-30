@@ -1,0 +1,136 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: 20px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto; /* Fix overflow for long descriptions */
+  position: relative;
+  padding: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: var(--accent-primary);
+}
+
+.modal-layout {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .modal-layout {
+    flex-direction: row;
+  }
+}
+
+.modal-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.modal-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.modal-price-before {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.modal-price-current {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-primary, var(--accent-color));
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.modal-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.modal-description h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-description ul {
+  padding-left: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.modal-add-btn {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.modal-add-btn:hover {
+  transform: translateY(-2px);
+  background: var(--accent-hover);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
