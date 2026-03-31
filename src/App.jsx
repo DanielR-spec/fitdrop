@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
@@ -11,7 +11,7 @@ import './index.css';
 function App() {
   return (
     <CartProvider>
-      <BrowserRouter>
+      <HashRouter>
         <div className="app">
           <Header />
           
@@ -25,7 +25,7 @@ function App() {
           <Footer />
           <Cart />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </CartProvider>
   );
 }
