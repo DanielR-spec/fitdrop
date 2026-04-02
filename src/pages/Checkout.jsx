@@ -60,14 +60,14 @@ const Checkout = () => {
   useEffect(() => {
     if (orderPlaced && trackingCode && !processedRef.current) {
       processedRef.current = true;
-      
+
       if (window.fbq) {
         window.fbq('track', 'Purchase', {
           value: Number(cartTotal) || 0,
-          currency: 'USD'
+          currency: 'COP'
         });
       }
-      
+
       clearCart();
 
       // Update order status in Apps Script
@@ -184,7 +184,7 @@ const Checkout = () => {
         }
 
         if (orderCreatedInSheet) {
-          const collection_status = paymentResult.status; 
+          const collection_status = paymentResult.status;
           navigate(`/checkout?collection_status=${collection_status}&external_reference=${localTrackingCode}`);
         } else {
           setIsSubmitting(false);
@@ -207,26 +207,26 @@ const Checkout = () => {
       <main className="page-container" style={{ display: 'flex', justifyContent: 'center', minHeight: '60vh', alignItems: 'center' }}>
         <div className="glass-panel success-container animate-fade-in" style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
           <div className="success-icon-container" style={{ background: 'rgba(239, 68, 68, 0.2)' }}>
-             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-               <line x1="18" y1="6" x2="6" y2="18"></line>
-               <line x1="6" y1="6" x2="18" y2="18"></line>
-             </svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </div>
           <h2 className="success-title" style={{ color: '#ef4444' }}>Pago Rechazado</h2>
           <p className="success-message">
             Lo sentimos, tu pago no pudo ser procesado. Por favor revisa los datos de tu tarjeta y asegúrate de que el titular coincida, o intenta con otro medio de pago.
           </p>
           <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'center' }}>
-            <Link 
-              to="/checkout" 
-              className="checkout-btn" 
+            <Link
+              to="/checkout"
+              className="checkout-btn"
               style={{ margin: '0', padding: '0.8rem 1.5rem', background: '#ef4444', textDecoration: 'none', display: 'flex', alignItems: 'center' }}
             >
               Reintentar
             </Link>
-            <Link 
-              to="/" 
-              className="back-btn" 
+            <Link
+              to="/"
+              className="back-btn"
               style={{ margin: '0', padding: '0.8rem 1.5rem', textAlign: 'center' }}
             >
               Volver a la Tienda
@@ -254,16 +254,16 @@ const Checkout = () => {
             Código de Seguimiento: <b style={{ color: 'var(--accent-primary)' }}>{trackingCode || 'Revisa tu correo'}</b>
           </p>
           <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link 
+            <Link
               to={`/track/${trackingCode}`}
-              className="checkout-btn" 
+              className="checkout-btn"
               style={{ margin: '0', width: 'auto', padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
             >
               📦 Rastrear Pedido
             </Link>
-            <Link 
-              to="/" 
-              className="back-btn" 
+            <Link
+              to="/"
+              className="back-btn"
               style={{ margin: '0', padding: '0.8rem 1.5rem', textAlign: 'center' }}
             >
               Volver a la Tienda

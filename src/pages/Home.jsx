@@ -47,7 +47,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const loaderRef = useRef(null);
-  
+
   // Refactor: Introduce deduplication and caching mechanisms
   const processingRef = useRef(new Set()); // Tracks IDs that have completely resolved
   const inFlightRef = useRef(new Set()); // Tracks URLs currently being fetched to prevent duplicates
@@ -129,9 +129,9 @@ const Home = () => {
           const { current_price, original_price } = realData.additional_attributes;
           const currentPriceNum = Number(current_price);
           const originalPriceNum = Number(original_price);
-          const hasOffer = (!isNaN(originalPriceNum) && !isNaN(currentPriceNum)) 
-                           ? originalPriceNum > currentPriceNum 
-                           : false;
+          const hasOffer = (!isNaN(originalPriceNum) && !isNaN(currentPriceNum))
+            ? originalPriceNum > currentPriceNum
+            : false;
 
           const updatedP = {
             ...p,
@@ -172,11 +172,11 @@ const Home = () => {
       // 2. Separate into cached vs network tasks and check for in-flight collisions
       productsToProcess.forEach(p => {
         const key = String(p.prodId || p.id);
-        
+
         if (p.trigger && p.prodId && p.trigger.includes('-')) {
           const [superModelId, idAttribute] = p.trigger.split('-');
           const url = `https://www.decathlon.com.co/module/oneshop_oneff/sizeselector?superModelId=${superModelId}&idAttribute=${idAttribute}&modelId=${p.prodId}&lat=4.7344442&lng=-74.0667869&postalCode=111156&usage=PRODUCT_ACTION`;
-          
+
           if (cacheRef.current.has(url)) {
             // Already cached - skip fetch
             cachedItems.push({ p, key, data: cacheRef.current.get(url) });
@@ -225,7 +225,7 @@ const Home = () => {
                 // Store successful data in memory cache
                 cacheRef.current.set(task.url, decathlonData);
               }
-              
+
               // Always clean up in-flight tracker when done
               inFlightRef.current.delete(task.url);
 
@@ -311,9 +311,9 @@ const Home = () => {
 
   const selectedProduct = useMemo(() => {
     if (!productIdFromUrl) return null;
-    return products.find(p => String(p.prodId || p.id) === productIdFromUrl) 
-        || allOriginalProducts.find(p => String(p.prodId || p.id) === productIdFromUrl)
-        || null;
+    return products.find(p => String(p.prodId || p.id) === productIdFromUrl)
+      || allOriginalProducts.find(p => String(p.prodId || p.id) === productIdFromUrl)
+      || null;
   }, [productIdFromUrl, products, allOriginalProducts]);
 
   useEffect(() => {
@@ -321,7 +321,7 @@ const Home = () => {
       window.fbq('track', 'ViewContent', {
         content_name: getProductName(selectedProduct),
         value: Number(selectedProduct.pCombo || selectedProduct.pAntes || 0),
-        currency: 'USD'
+        currency: 'COP'
       });
     }
   }, [selectedProduct]);
@@ -340,7 +340,7 @@ const Home = () => {
       {tab === 'categories' && !loading && !error && (
         <div className="category-filter">
           {availableCategories.map(cat => (
-            <button 
+            <button
               key={cat}
               onClick={() => handleCategoryClick(cat)}
               className={`category-btn ${currentCategory === cat || (!currentCategory && cat === 'Todo') ? 'active' : ''}`}
