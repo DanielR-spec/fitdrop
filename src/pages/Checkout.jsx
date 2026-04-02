@@ -60,6 +60,14 @@ const Checkout = () => {
   useEffect(() => {
     if (orderPlaced && trackingCode && !processedRef.current) {
       processedRef.current = true;
+      
+      if (window.fbq) {
+        window.fbq('track', 'Purchase', {
+          value: Number(cartTotal) || 0,
+          currency: 'USD'
+        });
+      }
+      
       clearCart();
 
       // Update order status in Apps Script

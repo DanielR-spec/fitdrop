@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
 import ProductGrid from '../components/ProductGrid';
+import ProductModal from '../components/ProductModal';
 import './Home.css';
 
 const ITEMS_PER_PAGE = 8;
@@ -42,6 +43,8 @@ const Home = () => {
   const [fetchingMore, setFetchingMore] = useState(false);
   const [error, setError] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { id: productIdFromUrl } = useParams();
+  const navigate = useNavigate();
 
   const loaderRef = useRef(null);
   
@@ -306,6 +309,27 @@ const Home = () => {
     processingRef.current.clear();
   };
 
+  const selectedProduct = useMemo(() => {
+    if (!productIdFromUrl) return null;
+    return products.find(p => String(p.prodId || p.id) === productIdFromUrl) 
+        || allOriginalProducts.find(p => String(p.prodId || p.id) === productIdFromUrl)
+        || null;
+  }, [productIdFromUrl, products, allOriginalProducts]);
+
+  useEffect(() => {
+    if (selectedProduct && window.fbq) {
+      window.fbq('track', 'ViewContent', {
+        content_name: getProductName(selectedProduct),
+        value: Number(selectedProduct.pCombo || selectedProduct.pAntes || 0),
+        currency: 'USD'
+      });
+    }
+  }, [selectedProduct]);
+
+  const handleCloseModal = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
+
   return (
     <main className="page-container">
       <div className="home-header">
@@ -355,6 +379,13 @@ const Home = () => {
             </div>
           )}
         </>
+      )}
+
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          onClose={handleCloseModal}
+        />
       )}
     </main>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCart } from '../contexts/CartContext';
-import ProductModal from './ProductModal';
+import { useNavigate } from 'react-router-dom';
 import './ProductCard.css';
 
 const getProductName = (product) => {
@@ -38,7 +38,7 @@ const formatAndInflatePrice = (price) => {
 const ProductCard = ({ product }) => {
   const name = getProductName(product);
   const { addToCart } = useCart();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const cleanPrice = (val) => {
     if (!val) return 0;
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
       <div className="product-card glass-panel">
         <div
           className="product-image-container"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => navigate(`/product/${product.prodId || product.id}`)}
           style={{ cursor: 'pointer' }}
         >
           <img
@@ -117,12 +117,6 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <ProductModal
-          product={mergedProduct}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
     </>
   );
 };

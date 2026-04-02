@@ -15,6 +15,17 @@
 
 .logo-link {
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  height: 80px;
+  width: auto;
+  border-radius: 4px;
+  /* Optional, soften edges if it's a square logo */
+  object-fit: contain;
 }
 
 .logo-text {
@@ -90,21 +101,29 @@
 }
 
 @keyframes badge-pop {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 768px) {
   .header {
     padding: 1rem;
   }
+
   .nav-item {
     font-size: 0;
     padding: 0.5rem;
   }
+
   .nav-item::before {
     font-size: 1.25rem;
   }
+
   .nav-links {
     gap: 0.5rem;
   }

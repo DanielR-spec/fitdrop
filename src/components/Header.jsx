@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import logoUrl from '../assets/logo.png';
 import './Header.css';
 
 const Header = () => {
@@ -10,6 +11,7 @@ const Header = () => {
     <header className="header glass-panel">
       <div className="header-container page-container">
         <Link to="/" className="logo-link">
+          <img src={logoUrl} alt="FitDrop Logo" className="logo-img" />
           <h1 className="logo-text text-gradient">FitDrop</h1>
         </Link>
         <nav className="nav-links">
