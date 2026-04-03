@@ -28,7 +28,7 @@ const formatAndInflatePrice = (price) => {
 
   if (!numStr) return price;
 
-  const inflatedPrice = parseInt(numStr, 10);
+  const inflatedPrice = Math.round(parseInt(numStr, 10) * 1.3);
 
   return `$ ${inflatedPrice
     .toString()

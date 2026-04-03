@@ -208,7 +208,13 @@ const Home = () => {
         try {
           const requestsToProxy = chunk.map((task, idx) => ({
             index: idx,
-            url: task.url
+            url: task.url,
+            meta: {
+              id: String(task.p.prodId || task.p.id || ''),
+              name: task.p.nombre || '',
+              image: task.p.img || '',
+              link: `${import.meta.env.VITE_PUBLIC_SITE_URL}/#/product/${task.p.prodId || task.p.id}`
+            }
           }));
 
           const jsonRes = await fetchFromProxy(requestsToProxy);
