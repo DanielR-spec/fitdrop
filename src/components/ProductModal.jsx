@@ -7,14 +7,14 @@ const formatAndInflatePrice = (price) => {
   const numStr = typeof price === 'string' ? price.replace(/[^0-9]/g, '') : price.toString();
   if (!numStr) return price;
 
-  const inflatedPrice = parseInt(numStr, 10);
+  const inflatedPrice = Math.round(parseInt(numStr, 10) * 1.3);
 
   return `$ ${inflatedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
 };
 
 const ProductModal = ({ product, onClose }) => {
   const { addToCart } = useCart();
-  
+
   const [selectedVariation, setSelectedVariation] = useState(null);
 
   useEffect(() => {
@@ -27,11 +27,11 @@ const ProductModal = ({ product, onClose }) => {
 
   if (!product) return null;
 
-  const displayPriceAntes = selectedVariation?.additional_attributes?.original_price 
+  const displayPriceAntes = selectedVariation?.additional_attributes?.original_price
     || parseFloat(product.pAntes || 0);
-  const displayPriceCurrent = selectedVariation?.additional_attributes?.current_price 
+  const displayPriceCurrent = selectedVariation?.additional_attributes?.current_price
     || parseFloat(product.pCombo || product.pAntes || 0);
-  
+
   // Decathlon stores names under size_name, name, or we fallback to script name
   let variationLabel = '';
   if (selectedVariation) {
@@ -51,9 +51,9 @@ const ProductModal = ({ product, onClose }) => {
         <button className="modal-close-btn" onClick={onClose}>&times;</button>
         <div className="modal-layout">
           <div className="modal-image-container">
-            <img 
-              src={product.img || 'https://via.placeholder.com/300?text=No+Image'} 
-              alt={displayName} 
+            <img
+              src={product.img || 'https://via.placeholder.com/300?text=No+Image'}
+              alt={displayName}
               className="modal-image"
             />
           </div>
@@ -63,7 +63,7 @@ const ProductModal = ({ product, onClose }) => {
               <p className="modal-price-before">Antes: {formatAndInflatePrice(displayPriceAntes)}</p>
             )}
             <p className="modal-price-current">{priceCurrent}</p>
-            
+
             <div className="modal-description">
               <h3>Detalles</h3>
               <p>Este es un excelente producto garantizado para ofrecer el mejor rendimiento. Aprovecha el precio especial y llévatelo hoy mismo.</p>
@@ -105,7 +105,7 @@ const ProductModal = ({ product, onClose }) => {
               </div>
             )}
 
-            <button 
+            <button
               className="modal-add-btn"
               onClick={() => {
                 addToCart({
