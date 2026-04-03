@@ -30,19 +30,19 @@ export const CartProvider = ({ children }) => {
       // Create a relatively unique ID based on available data
       const id = product.nombre || product.url || Math.random().toString();
       const existing = prev.find(item => item.id === id);
-      
+
       if (existing) {
-        return prev.map(item => 
+        return prev.map(item =>
           item.id === id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      
+
       // Compute the price using the same logic as ProductCard
       const priceSource = product.pCombo || product.pAntes || '0';
       const numStr = typeof priceSource === 'string' ? priceSource.replace(/[^0-9]/g, '') : priceSource.toString();
       const basePrice = parseInt(numStr, 10) || 0;
-      const price = basePrice;
-      
+      const price = basePrice * 1.3;
+
       return [...prev, { ...product, id, price, quantity: 1 }];
     });
     setIsCartOpen(true); // Open sidebar automatically when adding

@@ -93,7 +93,7 @@ const Checkout = () => {
 
   const handlePaymentSubmit = async (cardFormData) => {
     if (!MP_ACCESS_TOKEN || MP_ACCESS_TOKEN === 'YOUR_MP_ACCESS_TOKEN') {
-      alert('Por favor configura VITE_MP_ACCESS_TOKEN en el archivo .env');
+      //alert('Por favor configura VITE_MP_ACCESS_TOKEN en el archivo .env');
       return;
     }
 
