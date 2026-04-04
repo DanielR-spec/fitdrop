@@ -3,9 +3,9 @@ import { useCart } from '../contexts/CartContext';
 import './ProductModal.css';
 
 const formatAndInflatePrice = (price) => {
-  if (!price) return 'N/D';
+  if (price === null || price === undefined) return null;
   const numStr = typeof price === 'string' ? price.replace(/[^0-9]/g, '') : price.toString();
-  if (!numStr) return price;
+  if (!numStr) return null;
 
   const inflatedPrice = Math.round(parseInt(numStr, 10) * 1.3);
 
@@ -44,6 +44,7 @@ const ProductModal = ({ product, onClose }) => {
   const displayName = variationLabel || product.nombre || 'Producto';
 
   const priceCurrent = formatAndInflatePrice(displayPriceCurrent);
+  const isPriceLoading = !product?.isProcessed;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -59,10 +60,16 @@ const ProductModal = ({ product, onClose }) => {
           </div>
           <div className="modal-info">
             <h2 className="modal-title">{displayName}</h2>
-            {displayPriceAntes && displayPriceAntes > displayPriceCurrent && (
-              <p className="modal-price-before">Antes: {formatAndInflatePrice(displayPriceAntes)}</p>
+            {isPriceLoading ? (
+              <div className="price-loading" style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontStyle: 'italic', fontSize: '1.2rem' }}>Cargando precio...</div>
+            ) : (
+              <>
+                {displayPriceAntes && displayPriceAntes > displayPriceCurrent && (
+                  <p className="modal-price-before">Antes: {formatAndInflatePrice(displayPriceAntes)}</p>
+                )}
+                {priceCurrent && <p className="modal-price-current">{priceCurrent}</p>}
+              </>
             )}
-            <p className="modal-price-current">{priceCurrent}</p>
 
             <div className="modal-description">
               <h3>Detalles</h3>

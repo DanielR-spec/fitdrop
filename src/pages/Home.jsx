@@ -322,6 +322,113 @@ const Home = () => {
       || null;
   }, [productIdFromUrl, products, allOriginalProducts]);
 
+  const isSelectedProductProcessed = selectedProduct?.isProcessed;
+
+  useEffect(() => {
+    const processSingleResult = (key, url, data) => {
+      setProducts(prev => {
+        const existingIdx = prev.findIndex(item => String(item.prodId || item.id) === key);
+        const baseProduct = existingIdx >= 0 ? prev[existingIdx] : selectedProduct;
+        
+        const newProducts = [...prev];
+        const realData = (data && data.length > 0) ? data[0] : null;
+
+        if (!realData || !realData.additional_attributes) {
+          processingRef.current.add(key);
+          if (url) inFlightRef.current.delete(url);
+          const updatedFail = { ...baseProduct, isProcessed: true };
+          if (existingIdx >= 0) newProducts[existingIdx] = updatedFail;
+          else newProducts.push(updatedFail);
+          return newProducts;
+        }
+
+        const { current_price, original_price } = realData.additional_attributes;
+        const currentPriceNum = Number(current_price);
+        const originalPriceNum = Number(original_price);
+        const hasOffer = (!isNaN(originalPriceNum) && !isNaN(currentPriceNum))
+          ? originalPriceNum > currentPriceNum
+          : false;
+
+        const updatedP = {
+          ...baseProduct,
+          nombre: realData.name || baseProduct.nombre,
+          pAntes: original_price,
+          pCombo: current_price,
+          hasOffer,
+          isSuperDeal: hasOffer,
+          isCombo: baseProduct.tipo === 'Multi',
+          variations: data,
+          isProcessed: true
+        };
+
+        if (existingIdx >= 0) {
+          newProducts[existingIdx] = updatedP;
+        } else {
+          newProducts.push(updatedP);
+        }
+        processingRef.current.add(key);
+        if (url) inFlightRef.current.delete(url);
+        return newProducts;
+      });
+    };
+
+    const fetchSingleProduct = async () => {
+      if (!selectedProduct || isSelectedProductProcessed) return;
+
+      const key = String(selectedProduct.prodId || selectedProduct.id);
+      if (processingRef.current.has(key)) return;
+
+      if (selectedProduct.trigger && selectedProduct.prodId && selectedProduct.trigger.includes('-')) {
+        const [superModelId, idAttribute] = selectedProduct.trigger.split('-');
+        const url = `https://www.decathlon.com.co/module/oneshop_oneff/sizeselector?superModelId=${superModelId}&idAttribute=${idAttribute}&modelId=${selectedProduct.prodId}&lat=4.7344442&lng=-74.0667869&postalCode=111156&usage=PRODUCT_ACTION`;
+
+        if (cacheRef.current.has(url)) {
+          processSingleResult(key, url, cacheRef.current.get(url));
+        } else if (!inFlightRef.current.has(url)) {
+          inFlightRef.current.add(url);
+          try {
+            const jsonRes = await fetchFromProxy([{
+              index: 0,
+              url,
+              meta: {
+                id: key,
+                name: selectedProduct.nombre || '',
+                image: selectedProduct.img || '',
+                link: `${import.meta.env.VITE_PUBLIC_SITE_URL}/#/product/${key}`
+              }
+            }]);
+
+            const proxyResult = jsonRes?.results?.find(r => r.index === 0);
+            let decathlonData = [];
+            
+            if (jsonRes.success && proxyResult && proxyResult.data) {
+              decathlonData = proxyResult.data;
+              cacheRef.current.set(url, decathlonData);
+            }
+            processSingleResult(key, url, decathlonData);
+          } catch (err) {
+            console.warn("Proxy processing failed for single product", err);
+            processingRef.current.add(key);
+            inFlightRef.current.delete(url);
+            
+            setProducts(prev => {
+              const newProducts = [...prev];
+              const existingIdx = newProducts.findIndex(item => String(item.prodId || item.id) === key);
+              const updatedFail = { ...(existingIdx >= 0 ? newProducts[existingIdx] : selectedProduct), isProcessed: true };
+              if (existingIdx >= 0) newProducts[existingIdx] = updatedFail;
+              else newProducts.push(updatedFail);
+              return newProducts;
+            });
+          }
+        }
+      } else {
+        processSingleResult(key, null, null);
+      }
+    };
+
+    fetchSingleProduct();
+  }, [selectedProduct, isSelectedProductProcessed]);
+
   useEffect(() => {
     if (selectedProduct && window.fbq) {
       window.fbq('track', 'ViewContent', {
