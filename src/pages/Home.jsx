@@ -22,7 +22,7 @@ const getProductName = (product) => {
 
 const fetchFromProxy = async (requests) => {
   const proxyUrl = import.meta.env.VITE_DECATHLON_PROXY_URL;
-  console.log('[Proxy Request]', requests);
+  // console.log('[Proxy Request]', requests);
 
   const res = await fetch(proxyUrl, {
     method: 'POST',
@@ -31,7 +31,7 @@ const fetchFromProxy = async (requests) => {
   });
 
   const data = await res.json();
-  console.log('[Proxy Response]', data);
+  //console.log('[Proxy Response]', data);
   return data;
 };
 
