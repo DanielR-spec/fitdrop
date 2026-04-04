@@ -131,8 +131,14 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.modal-add-btn:hover {
+.modal-add-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   background: var(--accent-hover);
   box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+.modal-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
 }

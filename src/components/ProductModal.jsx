@@ -114,7 +114,9 @@ const ProductModal = ({ product, onClose }) => {
 
             <button
               className="modal-add-btn"
+              disabled={isPriceLoading}
               onClick={() => {
+                if (isPriceLoading) return;
                 addToCart({
                   ...product,
                   id: selectedVariation ? `${product.prodId || product.id}-${selectedVariation.idAttribute || selectedVariation._id || Date.now()}` : (product.prodId || product.id),
@@ -126,7 +128,7 @@ const ProductModal = ({ product, onClose }) => {
                 onClose();
               }}
             >
-              Agregar al Carrito
+              {isPriceLoading ? 'Cargando...' : 'Agregar al Carrito'}
             </button>
           </div>
         </div>
